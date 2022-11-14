@@ -53,6 +53,7 @@ describe('2. GET /api/articles', () => {
         const { articles } = body;
         expect(articles).toBeInstanceOf(Array);
         expect(articles).toHaveLength(12);
+        expect(articles).toBeSortedBy("created_at", {descending: true})
         articles.forEach((article) => {
           expect(article).toEqual(
             expect.objectContaining({
@@ -62,7 +63,8 @@ describe('2. GET /api/articles', () => {
                 author: expect.any(String),
                 body: expect.any(String),
                 created_at: expect.any(String),
-                votes: expect.any(Number)
+                votes: expect.any(Number),
+                //comment_count: expect.any(Number)
             })
           );
         });
