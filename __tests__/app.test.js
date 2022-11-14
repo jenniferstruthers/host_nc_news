@@ -12,6 +12,17 @@ beforeEach(() => {
     return seed(data);
   });
 
+  describe("Error handling", () => {
+    test("status:404, responds with a error when passed valid but non-existant endpoint", () => {
+      return request(app)
+        .get("/api/nonsense")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Route not found");
+        });
+    });
+  });
+
 describe('1. GET /api/topics', () => {
   test('status:200, responds with an array of topics objects, with slug and description properties', () => {
     return request(app)
