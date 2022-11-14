@@ -6,3 +6,9 @@ exports.selectTopics = () => {
     })
 };
 
+exports.selectArticles = () => {
+    return db.query(`SELECT * FROM articles;`).then(articles => {
+    return articles.rows
+    })
+};
+
