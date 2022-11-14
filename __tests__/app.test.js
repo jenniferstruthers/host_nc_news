@@ -45,7 +45,7 @@ describe('1. GET /api/topics', () => {
 });
 
 describe('2. GET /api/articles', () => {
-  test('status:200, responds with an array of article objects, with title, topic, author, body, created_at and voted properties ', () => {
+  test('status:200, responds with an array of article objects, with title, topic, author, body, created_at, comment_count and votes properties ', () => {
     return request(app)
       .get('/api/articles')
       .expect(200)
@@ -64,7 +64,7 @@ describe('2. GET /api/articles', () => {
                 body: expect.any(String),
                 created_at: expect.any(String),
                 votes: expect.any(Number),
-                //comment_count: expect.any(Number)
+                comment_count: expect.any(Number)
             })
           );
         });
