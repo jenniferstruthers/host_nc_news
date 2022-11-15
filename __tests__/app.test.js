@@ -71,3 +71,42 @@ describe('2. GET /api/articles', () => {
       });
   });
 });
+
+describe('3. GET /api/articles/:article_id', () => {
+  test('status:200, responds with an article object, with title, topic, author, body, created_at, and votes properties ', () => {
+    return request(app)
+      .get('/api/articles/1')
+      .expect(200)
+      .then(({ body }) => {
+        const { article} = body;
+        expect(article).toBeInstanceOf(Object);
+          expect(article).toEqual(
+            expect.objectContaining({
+                article_id: 1,
+                title: "Living in the shadow of a great man",
+                topic: "mitch",
+                author: "butter_bridge",
+                body: "I find this existence challenging",
+                created_at: "2020-07-09T20:11:00.000Z",
+                votes: 100
+            })
+          );
+      });
+  });
+  test('status:404, valid id not found ', () => {
+    return request(app)
+      .get('/api/articles/999')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('article not found')
+      });
+  });
+  test('status:400, invalid id', () => {
+    return request(app)
+      .get('/api/articles/nonsense')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('invalid article id')
+      });
+  });
+});
