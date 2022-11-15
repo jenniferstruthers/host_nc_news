@@ -43,3 +43,31 @@ describe('1. GET /api/topics', () => {
       });
   });
 });
+
+describe('2. GET /api/articles', () => {
+  test('status:200, responds with an array of article objects, with title, topic, author, body, created_at, comment_count and votes properties ', () => {
+    return request(app)
+      .get('/api/articles')
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeInstanceOf(Array);
+        expect(articles).toHaveLength(12);
+        expect(articles).toBeSortedBy("created_at", {descending: true})
+        articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+                article_id: expect.any(Number),
+                title: expect.any(String),
+                topic: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                comment_count: expect.any(Number)
+            })
+          );
+        });
+      });
+  });
+});
