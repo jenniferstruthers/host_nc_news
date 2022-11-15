@@ -1,4 +1,5 @@
-const db = require('../db/connection')
+const db = require('../db/connection');
+const { checkArticleExists } = require('../db/db.js');
 
 exports.selectTopics = () => {
     return db.query(`SELECT * FROM topics;`).then(topics => {
@@ -16,4 +17,17 @@ exports.selectArticles = (sort_by = "created_at", order = "desc") => {
     return articles.rows
     })
 };
+
+exports.selectArticlebyID = (article_id) => {
+    return checkArticleExists(article_id).then(()=>{
+        return db.query(`SELECT * FROM articles 
+        WHERE article_id = $1;`, [article_id])
+        .then((article) => {
+        return article.rows[0]
+        })
+    })
+}
+
+
+
 
