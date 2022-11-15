@@ -30,5 +30,17 @@ exports.selectArticlebyID = (article_id) => {
 }
 
 
+exports.selectComments = (article_id, sort_by = "created_at", order = "desc") => {
+    return checkArticleExists(article_id).then(()=>{
+        return db.query(`SELECT * FROM comments 
+        WHERE article_id = $1
+        ORDER BY ${sort_by} ${order};`, [article_id])
+        .then((res) => {
+        return res.rows
+        })
+    })
+
+}
+
 
 
