@@ -83,12 +83,12 @@ describe('3. GET /api/articles/:article_id', () => {
           expect(article).toEqual(
             expect.objectContaining({
                 article_id: 1,
-                title: expect.any(String),
-                topic: expect.any(String),
-                author: expect.any(String),
-                body: expect.any(String),
-                created_at: expect.any(String),
-                votes: expect.any(Number)
+                title: "Living in the shadow of a great man",
+                topic: "mitch",
+                author: "butter_bridge",
+                body: "I find this existence challenging",
+                created_at: "2020-07-09T20:11:00.000Z",
+                votes: 100
             })
           );
       });

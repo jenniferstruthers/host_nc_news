@@ -19,13 +19,14 @@ exports.selectArticles = (sort_by = "created_at", order = "desc") => {
 };
 
 exports.selectArticlebyID = (article_id) => {
-    return checkArticleExists(article_id).then(()=>{
-        return db.query(`SELECT * FROM articles 
+    return db.query(`SELECT * FROM articles 
         WHERE article_id = $1;`, [article_id])
-        .then((article) => {
-        return article.rows[0]
+        .then((res) => {
+            if(res.rows.length === 0){
+                return Promise.reject({status:404,msg:'article not found'})
+            }
+        return res.rows[0]
         })
-    })
 }
 
 
