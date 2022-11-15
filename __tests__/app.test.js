@@ -161,3 +161,26 @@ describe('4. GET /api/articles/:article_id/comments', () => {
   });
 
 });
+
+describe('5. POST /api/articles/:article_id/comment', () => {
+  test('status:201, responds with the comment', () => {
+      const newComment = {
+        username: "butter_bridge",
+        body: "my great comment"
+      }
+  return request(app)
+  .post('/api/articles/1/comments')
+  .send(newComment)
+  .expect(201)
+  .then((res) => {
+    console.log(res.body.comment)
+      expect(res.body.comment).toMatchObject({
+        body: "my great comment",
+        votes: 0,
+        author: "butter_bridge",
+        article_id: 1,
+        created_at: expect.any(String)
+      })
+});
+})
+})
