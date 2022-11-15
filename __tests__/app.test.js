@@ -149,5 +149,15 @@ describe('4. GET /api/articles/:article_id/comments', () => {
         expect(body.msg).toBe('article not found')
       });
   });
+  test('status:200, but article has no comments', () => {
+    return request(app)
+      .get('/api/articles/8/comments')
+      .expect(200)
+      .then(({ body }) => {
+      const { comments } = body;
+      expect(comments).toHaveLength(0)
+      expect(comments).toEqual([])
+      });
+  });
 
 });
