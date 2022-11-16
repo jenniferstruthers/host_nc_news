@@ -161,3 +161,92 @@ describe('4. GET /api/articles/:article_id/comments', () => {
   });
 
 });
+
+describe('5. POST /api/articles/:article_id/comment', () => {
+  test('status:201, responds with the comment', () => {
+      const newComment = {
+        username: "butter_bridge",
+        body: "my great comment"
+      }
+  return request(app)
+  .post('/api/articles/1/comments')
+  .send(newComment)
+  .expect(201)
+  .then((res) => {
+      expect(res.body.comment).toMatchObject({
+        comment_id: expect.any(Number),
+        body: "my great comment",
+        votes: 0,
+        author: "butter_bridge",
+        article_id: 1,
+        created_at: expect.any(String)
+      })
+});
+})
+test('status:400, when there is no data in the send request', () => {
+  const newComment = {}
+return request(app)
+.post('/api/articles/1/comments')
+.send(newComment)
+.expect(400)
+.then((res) => {
+  expect(res.body.msg).toBe("bad request")
+
+});
+})
+test('status:400, when there is no BODY in the send request', () => {
+  const newComment = {username: "butter_bridge"}
+return request(app)
+.post('/api/articles/1/comments')
+.send(newComment)
+.expect(400)
+.then((res) => {
+  expect(res.body.msg).toBe("bad request")
+
+});
+})
+test('status:400, when there is no USERNAME in the send request', () => {
+  const newComment = {body: "bad bad comment"}
+return request(app)
+.post('/api/articles/1/comments')
+.send(newComment)
+.expect(400)
+.then((res) => {
+  expect(res.body.msg).toBe("bad request")
+
+});
+})
+test('status:404, when there is a valid comment, but article_id doesnt exist', () => {
+  const newComment = {username: "butter_bridge", body: "where is the article"}
+return request(app)
+.post('/api/articles/999/comments')
+.send(newComment)
+.expect(404)
+.then((res) => {
+  expect(res.body.msg).toBe('article not found')
+
+});
+})
+test('status:400, when there is a valid comment, but article_id is invalid', () => {
+  const newComment = {username: "butter_bridge", body: "where is the article"}
+return request(app)
+.post('/api/articles/nonsense/comments')
+.send(newComment)
+.expect(400)
+.then((res) => {
+  expect(res.body.msg).toBe('invalid article id')
+
+});
+})
+test('status:404, when the username doesnt exist', () => {
+  const newComment = {username: "jenjenjen", body: "hahah bad username"}
+return request(app)
+.post('/api/articles/1/comments')
+.send(newComment)
+.expect(404)
+.then((res) => {
+  expect(res.body.msg).toBe('invalid username')
+
+});
+})
+})
