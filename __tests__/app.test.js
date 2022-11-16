@@ -106,7 +106,7 @@ describe('3. GET /api/articles/:article_id', () => {
       .get('/api/articles/nonsense')
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('invalid article id')
+        expect(body.msg).toBe('bad request')
       });
   });
 });
@@ -138,7 +138,7 @@ describe('4. GET /api/articles/:article_id/comments', () => {
       .get('/api/articles/nonsense/comments')
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('invalid article id')
+        expect(body.msg).toBe('bad request')
       });
   });
   test('status:404, valid id not found ', () => {
@@ -234,7 +234,7 @@ return request(app)
 .send(newComment)
 .expect(400)
 .then((res) => {
-  expect(res.body.msg).toBe('invalid article id')
+  expect(res.body.msg).toBe('bad request')
 
 });
 })
@@ -248,5 +248,77 @@ return request(app)
   expect(res.body.msg).toBe('invalid username')
 
 });
+})
+})
+
+describe('6. PATCH /api/articles/:article_id', () => {
+  test('status:201, respond with updated article object', () => {
+  const voteChange =  {inc_votes: 1}
+  return request(app)
+  .patch('/api/articles/1')
+  .send(voteChange)
+  .expect(201)
+  .then((res) =>{
+      expect(res.body.article).toMatchObject({
+        article_id: 1,
+        title: "Living in the shadow of a great man",
+        topic: "mitch",
+        author: "butter_bridge",
+        body: "I find this existence challenging",
+        created_at: "2020-07-09T20:11:00.000Z",
+        votes: 101
+      })
+  })
+})
+test('status:201, respond with updated article object, for negative votes', () => {
+  const voteChange =  {inc_votes: -200}
+  return request(app)
+  .patch('/api/articles/1')
+  .send(voteChange)
+  .expect(201)
+  .then((res) =>{
+      expect(res.body.article).toMatchObject({
+        article_id: 1,
+        title: "Living in the shadow of a great man",
+        topic: "mitch",
+        author: "butter_bridge",
+        body: "I find this existence challenging",
+        created_at: "2020-07-09T20:11:00.000Z",
+        votes: -100
+      })
+  })
+})
+test('status:404, for when the article does not exist', () => {
+  const voteChange =  {inc_votes: -200}
+  return request(app)
+  .patch('/api/articles/2000')
+  .send(voteChange)
+  .expect(404)
+  .then((res) =>{
+    expect(res.body.msg).toBe('article not found')
+  })
+  
+})
+test('status:400, for when the article_id is invalid', () => {
+  const voteChange =  {inc_votes: 100000}
+  return request(app)
+  .patch('/api/articles/nonsense')
+  .send(voteChange)
+  .expect(400)
+  .then((res) =>{
+    expect(res.body.msg).toBe('bad request')
+  })
+  
+})
+test('status:400, for when inc_votes body is incorrect', () => {
+  const voteChange =  {inc_votes: "one"}
+  return request(app)
+  .patch('/api/articles/1')
+  .send(voteChange)
+  .expect(400)
+  .then((res) =>{
+    expect(res.body.msg).toBe('bad request')
+  })
+  
 })
 })

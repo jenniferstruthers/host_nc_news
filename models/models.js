@@ -59,3 +59,12 @@ exports.insertComment = (article_id,username,body) => {
     })
 })
 };
+
+exports.updateArticle = (article_id,body) => {
+    return checkArticleExists(article_id).then(()=>{
+    return db.query(`UPDATE articles SET votes = votes + $1  WHERE article_id = $2 RETURNING *`, 
+    [body.inc_votes, article_id]).then((article) => {
+        return article.rows[0]
+    })
+})
+}
