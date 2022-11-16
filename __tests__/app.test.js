@@ -106,7 +106,7 @@ describe('3. GET /api/articles/:article_id', () => {
       .get('/api/articles/nonsense')
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('invalid article id')
+        expect(body.msg).toBe('bad request')
       });
   });
 });
@@ -138,7 +138,7 @@ describe('4. GET /api/articles/:article_id/comments', () => {
       .get('/api/articles/nonsense/comments')
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('invalid article id')
+        expect(body.msg).toBe('bad request')
       });
   });
   test('status:404, valid id not found ', () => {
@@ -234,7 +234,7 @@ return request(app)
 .send(newComment)
 .expect(400)
 .then((res) => {
-  expect(res.body.msg).toBe('invalid article id')
+  expect(res.body.msg).toBe('bad request')
 
 });
 })
@@ -306,7 +306,18 @@ test('status:400, for when the article_id is invalid', () => {
   .send(voteChange)
   .expect(400)
   .then((res) =>{
-    expect(res.body.msg).toBe('invalid article id')
+    expect(res.body.msg).toBe('bad request')
+  })
+  
+})
+test('status:400, for when inc_votes body is incorrect', () => {
+  const voteChange =  {inc_votes: "one"}
+  return request(app)
+  .patch('/api/articles/1')
+  .send(voteChange)
+  .expect(400)
+  .then((res) =>{
+    expect(res.body.msg).toBe('bad request')
   })
   
 })
