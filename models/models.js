@@ -43,6 +43,9 @@ exports.selectComments = (article_id, sort_by = "created_at", order = "desc") =>
 }
 
 exports.insertComment = (article_id,username,body) => {
+    return checkArticleExists(article_id).then(()=>{
+    if (username === undefined || body === undefined) {
+        return Promise.reject({status:400, msg:'bad request'})}
     return db.query(`
     INSERT INTO comments
     (article_id, author, body)
@@ -54,4 +57,5 @@ exports.insertComment = (article_id,username,body) => {
     .then(comment => {
     return comment.rows[0]
     })
+})
 };
