@@ -238,4 +238,15 @@ return request(app)
 
 });
 })
+test('status:404, when the username doesnt exist', () => {
+  const newComment = {username: "jenjenjen", body: "hahah bad username"}
+return request(app)
+.post('/api/articles/1/comments')
+.send(newComment)
+.expect(404)
+.then((res) => {
+  expect(res.body.msg).toBe('invalid username')
+
+});
+})
 })

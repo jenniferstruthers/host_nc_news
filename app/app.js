@@ -24,6 +24,14 @@ app.use((err, req, res, next) => {
     else next(err)
 });
 
+app.use((err, request, response, next) => {
+  if (err.code === "23503") {
+    response.status(404).send({ msg:"invalid username"});
+  } else {
+    next(err);
+  }
+});
+
 
 app.use((err, req, res, next) => {
   if (err.status) {
