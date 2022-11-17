@@ -93,6 +93,27 @@ describe('3. GET /api/articles/:article_id', () => {
           );
       });
   });
+  test('status:200, now includes comment_count ', () => {
+    return request(app)
+      .get('/api/articles/1')
+      .expect(200)
+      .then(({ body }) => {
+        const { article} = body;
+        expect(article).toBeInstanceOf(Object);
+          expect(article).toEqual(
+            expect.objectContaining({
+                article_id: 1,
+                title: "Living in the shadow of a great man",
+                topic: "mitch",
+                author: "butter_bridge",
+                body: "I find this existence challenging",
+                created_at: "2020-07-09T20:11:00.000Z",
+                votes: 100,
+                comment_count: 11
+            })
+          );
+      });
+  });
   test('status:404, valid id not found ', () => {
     return request(app)
       .get('/api/articles/999')
