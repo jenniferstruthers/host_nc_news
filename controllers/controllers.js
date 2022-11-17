@@ -7,9 +7,7 @@ exports.getTopics = (req, res) => {
 };
 
 exports.getArticles = (req, res,next) => {
-  const topic = req.query.topic
-  const sort_by = req.query.sort_by
-  const order = req.query.order
+  const {topic, sort_by, order} = req.query
   selectArticles(topic,sort_by,order).then(articles => {
     res.status(200).send({articles})
   }).catch(err =>{

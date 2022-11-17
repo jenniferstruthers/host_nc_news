@@ -119,6 +119,7 @@ describe('4. GET /api/articles/:article_id/comments', () => {
       .then(({ body }) => {
         const { comments } = body;
         expect(comments).toBeInstanceOf(Array);
+        expect(comments).toHaveLength(11);
         expect(comments).toBeSortedBy("created_at", {descending: true})
         comments.forEach((comment) => {
           expect(comment).toEqual(
@@ -331,6 +332,7 @@ describe('7. GET /api/users', () => {
       .then(({ body }) => {
         const { users } = body;
         expect(users).toBeInstanceOf(Array);
+        expect(users).toHaveLength(4);
         users.forEach((user) => {
           expect(user).toEqual(
             expect.objectContaining({
@@ -353,6 +355,7 @@ describe('8. GET /api/articles?topic=input', () => {
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toBeInstanceOf(Array);
+        expect(articles).toHaveLength(11);
         articles.forEach((article) => {
           expect(article).toEqual(
             expect.objectContaining({
@@ -376,6 +379,7 @@ describe('8. GET /api/articles?topic=input', () => {
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toBeInstanceOf(Array);
+        expect(articles).toHaveLength(12);
         expect(articles).toBeSortedBy("votes", { descending: true });
         articles.forEach((article) => {
           expect(article).toEqual(
@@ -400,6 +404,7 @@ describe('8. GET /api/articles?topic=input', () => {
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toBeInstanceOf(Array);
+        expect(articles).toHaveLength(12);
         expect(articles).toBeSortedBy("created_at", { descending: false });
         articles.forEach((article) => {
           expect(article).toEqual(
