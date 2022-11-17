@@ -322,3 +322,24 @@ test('status:400, for when inc_votes body is incorrect', () => {
   
 })
 })
+
+describe('7. GET /api/users', () => {
+  test('status:200, responds with an array of user objects, with name, username and avatar_url properties', () => {
+    return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        expect(users).toBeInstanceOf(Array);
+        users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+                name: expect.any(String),
+                username: expect.any(String),
+                avatar_url: expect.any(String)
+            })
+          );
+        });
+      });
+  });
+});
