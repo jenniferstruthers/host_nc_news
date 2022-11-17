@@ -7,14 +7,38 @@ exports.selectTopics = () => {
     })
 };
 
-exports.selectArticles = (sort_by = "created_at", order = "desc") => {
-    return db.query(`SELECT articles.*, 
-    COUNT(comments.article_id) ::INT AS comment_count
-    FROM articles 
-    LEFT JOIN comments ON comments.article_id = articles.article_id
-    GROUP BY articles.article_id
-    ORDER BY ${sort_by} ${order};`).then(articles => {
-    return articles.rows
+exports.selectArticles = (topic, sort_by = "created_at", order = "desc") => {
+    return this.selectTopics().then((topics)=>{
+        let topicsArray = []
+        topics.forEach((topic)=>{
+            topicsArray.push(topic.slug)
+        })
+        if (topic && !topicsArray.includes(topic)){
+            return Promise.reject({status:404,msg:'topic not found'})
+        }
+        if(order!== 'asc' && order!== 'desc'){
+            return Promise.reject({status:400,msg:'bad request: please sort by "asc" or "desc"'})
+        }
+        const validSortBys = ['created_at', 'votes', 'title', 'topic', 'body']
+        if(!validSortBys.includes(sort_by)){
+            return Promise.reject({status:400,msg:'bad request: please sort by one of the following: created_at, votes, title, topic, body'})
+        }
+
+        let queryArray = []
+        let queryString = `SELECT articles.*, 
+        COUNT(comments.article_id) ::INT AS comment_count
+        FROM articles 
+        LEFT JOIN comments ON comments.article_id = articles.article_id`;
+        if (topic){
+            queryString += ` WHERE topic=$1`;
+            queryArray.push(topic)
+        }
+        queryString += ` GROUP BY articles.article_id
+        ORDER BY ${sort_by} ${order};`
+    
+        return db.query(queryString, queryArray).then(articles => {
+        return articles.rows
+        })
     })
 };
 
