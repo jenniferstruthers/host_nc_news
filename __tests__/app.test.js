@@ -481,3 +481,27 @@ describe('8. GET /api/articles?topic=input', () => {
       });
   });
 });
+
+describe('9. DELETE /api/comments/:comment_id', () => {
+  test('status:204', () => {
+  return request(app)
+  .delete('/api/comments/1')
+  .expect(204)
+})
+test('status:404, when comment_id is valid but non-existant', () => {
+  return request(app)
+  .delete('/api/comments/999')
+  .expect(404)
+  .then(({ body }) => {
+    expect(body.msg).toBe("comment_id not found");
+  });
+})
+test('status:400, when comment_id is invalid', () => {
+  return request(app)
+  .delete('/api/comments/nonsense')
+  .expect(400)
+  .then(({ body }) => {
+    expect(body.msg).toBe("bad request");
+  });
+})
+})
