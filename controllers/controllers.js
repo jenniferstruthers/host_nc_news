@@ -1,5 +1,5 @@
-const { selectTopics, selectArticles, selectArticlebyID, selectComments, insertComment, updateArticle, selectUsers, removeComment } = require('../models/models.js');
-
+const { selectTopics, selectArticles, selectArticlebyID, selectComments, insertComment, updateArticle, selectUsers, removeComment, selectEndpoints } = require('../models/models.js');
+const endpoints = require(`../endpoints.json`);
 exports.getTopics = (req, res) => {
   selectTopics().then(topics => {
     res.status(200).send({topics})
@@ -61,7 +61,6 @@ exports.patchArticle = (req, res, next) => {
     selectUsers().then(users => {
       res.status(200).send({users})
     });
-
   };
 
   exports.deleteComment = (req, res,next) => {
@@ -72,3 +71,10 @@ exports.patchArticle = (req, res, next) => {
     .catch(err =>{
       next(err)
     })}
+
+  exports.getEndpoints = (req, res) => {
+
+      return res.status(200).send({ message: endpoints })
+      .catch(err =>{
+        next(err)
+  })}
