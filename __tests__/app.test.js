@@ -3,6 +3,7 @@ const db = require("../db/connection")
 const request = require("supertest");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
+const endpoints = require("../endpoints.json");
 
 afterAll(() => {
   if (db.end) db.end();
@@ -505,3 +506,15 @@ test('status:400, when comment_id is invalid', () => {
   });
 })
 })
+
+describe("10: GET /api", () => {
+  test("status:200, responds with endpoints from file", () => {
+    return request(app)
+      .get('/api')
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body.message)
+        expect(body.message).toEqual(endpoints);
+      });
+  });
+});

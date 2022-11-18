@@ -113,4 +113,4 @@ exports.removeComment = (comment_id) => {
         } 
         else {return Promise.reject({status: 404,msg: "comment_id not found"})}
     });
-};
+}
